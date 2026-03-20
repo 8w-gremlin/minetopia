@@ -41,7 +41,12 @@ public class EntityEventHandler {
 
         VillageManager manager = VillageManager.get(level);
         var village = manager.findNearestVillage(spawnPos);
-        if (village.isEmpty()) return;
+        if (village.isEmpty()) {
+            event.getEntity().displayClientMessage(
+                    Component.literal("§cNo village found nearby§r — place a Town Hall first."), true);
+            event.setCanceled(true);
+            return;
+        }
 
         // Enforce population cap when housing structures exist
         int cap = village.get().getPopulationCapacity();

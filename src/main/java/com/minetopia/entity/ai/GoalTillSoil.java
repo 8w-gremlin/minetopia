@@ -9,6 +9,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
 
 import java.util.EnumSet;
 
@@ -92,7 +93,8 @@ public class GoalTillSoil extends Goal {
                 origin.offset(-r, -2, -r),
                 origin.offset( r,  2,  r))) {
             BlockState state = level.getBlockState(pos);
-            if (isTillable(state) && level.getBlockState(pos.above()).isAir()) {
+            if (isTillable(state) && level.getBlockState(pos.above()).isAir()
+                    && hasWaterNearby(level, pos)) {
                 targetPos = pos.immutable();
                 return true;
             }
@@ -105,5 +107,16 @@ public class GoalTillSoil extends Goal {
                 || state.is(Blocks.GRASS_BLOCK)
                 || state.is(Blocks.DIRT_PATH)
                 || state.is(Blocks.COARSE_DIRT);
+    }
+
+    /**
+     * Returns true if there is a water source block within 4 blocks on the same Y level.
+     * Mirrors vanilla farmland hydration rules.
+     */
+    private static boolean hasWaterNearby(ServerLevel level, BlockPos pos) {
+        for (BlockPos check : BlockPos.betweenClosed(pos.offset(-4, 0, -4), pos.offset(4, 1, 4))) {
+            if (level.getFluidState(check).is(Fluids.WATER)) return true;
+        }
+        return false;
     }
 }

@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.material.Fluids;
 
 import java.util.EnumSet;
 
@@ -22,6 +23,7 @@ import java.util.EnumSet;
 public class GoalFarmCrops extends Goal {
 
     private static final double REACH_DIST_SQ = 6.25; // 2.5 blocks
+    private static final int SEARCH_RANGE = 20;
     private static final int WORK_START = 500;
     private static final int WORK_END   = 11500;
     private static final int STUCK_LIMIT = 80;
@@ -155,12 +157,14 @@ public class GoalFarmCrops extends Goal {
 
     private boolean findTarget(ServerLevel level) {
         BlockPos center = villager.blockPosition();
-        // Priority 1: find mature crops to harvest
+        int r = SEARCH_RANGE;
+        // Priority 1: find mature crops to harvest (must be on irrigated farmland)
         for (BlockPos pos : BlockPos.betweenClosed(
-                center.offset(-12, -3, -12),
-                center.offset( 12,  3,  12))) {
+                center.offset(-r, -3, -r),
+                center.offset( r,  3,  r))) {
             BlockState below = level.getBlockState(pos);
             if (!below.is(Blocks.FARMLAND)) continue;
+            if (!hasWaterNearby(level, pos)) continue;
             BlockPos cropPos = pos.above();
             BlockState cropState = level.getBlockState(cropPos);
             if (!(cropState.getBlock() instanceof CropBlock crop)) continue;
@@ -170,21 +174,33 @@ public class GoalFarmCrops extends Goal {
                 return true;
             }
         }
-        // Priority 2: find bare farmland to plant on (if we have seed)
+        // Priority 2: find bare irrigated farmland to plant on (if we have seed)
         if (!hasSeed(Items.WHEAT_SEEDS) && !hasSeed(Items.CARROT)
                 && !hasSeed(Items.POTATO) && !hasSeed(Items.BEETROOT_SEEDS)) {
             return false;
         }
         for (BlockPos pos : BlockPos.betweenClosed(
-                center.offset(-12, -3, -12),
-                center.offset( 12,  3,  12))) {
+                center.offset(-r, -3, -r),
+                center.offset( r,  3,  r))) {
             BlockState below = level.getBlockState(pos);
             if (!below.is(Blocks.FARMLAND)) continue;
+            if (!hasWaterNearby(level, pos)) continue;
             BlockPos abovePos = pos.above();
             if (!level.getBlockState(abovePos).isAir()) continue;
             targetPos = pos.immutable();
             isHarvest = false;
             return true;
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if there is a water source block within 4 blocks on the same Y level.
+     * Mirrors vanilla farmland hydration rules.
+     */
+    private static boolean hasWaterNearby(ServerLevel level, BlockPos pos) {
+        for (BlockPos check : BlockPos.betweenClosed(pos.offset(-4, 0, -4), pos.offset(4, 1, 4))) {
+            if (level.getFluidState(check).is(Fluids.WATER)) return true;
         }
         return false;
     }

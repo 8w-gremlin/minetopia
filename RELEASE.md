@@ -4,6 +4,15 @@ Versioning: MAJOR.MINOR.PATCH — PATCH and MINOR roll 0–99 before incrementin
 
 ---
 
+## [1.0.2] — 2026-03-21
+
+### Fixed
+- Summoning a villager token with no village nearby now shows an error message instead of silently doing nothing
+- Farmer no longer tills random dirt/grass patches around the world — `GoalTillSoil` now only targets soil blocks that have a water source within 4 blocks (standard irrigation distance)
+- Farmer no longer plants crops on unirrigated farmland — `GoalFarmCrops` now requires water within 4 blocks of any farmland it targets; search radius expanded to 20 blocks so the farmer can reach the field from anywhere in the village
+
+---
+
 ## [1.0.1] — 2026-03-21
 
 ### Fixed
