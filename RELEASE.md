@@ -4,6 +4,17 @@ Versioning: MAJOR.MINOR.PATCH — PATCH and MINOR roll 0–99 before incrementin
 
 ---
 
+## [1.0.1] — 2026-03-21
+
+### Fixed
+- All 7 professions with 128×64 textures (Bard, Captain, Chef, Cleric, Druid, Guard, Rancher) cropped to standard 64×64 player-skin format — previously rendered broken in-game
+
+### Added
+- `giveStartingItems()` implemented for all remaining professions: Miner (pickaxe + torches), Lumberjack (axe), Blacksmith (iron ingots + coal), Chef (coal + beef), Rancher (wheat), Cleric (glass bottles + nether wart + blaze powder), Druid (bone meal), Teacher (books + sugar cane)
+- `getWorkToolClass()` implemented for Miner (`PickaxeItem`) and Lumberjack (`AxeItem`) — tools now auto-equip to mainhand on spawn
+
+---
+
 ## [1.0.0] — 2026-03-21
 
 ### Initial release

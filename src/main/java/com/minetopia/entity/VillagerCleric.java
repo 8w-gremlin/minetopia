@@ -8,6 +8,7 @@ import com.minetopia.village.storage.ItemDesire;
 import com.minetopia.village.storage.ItemDesireSet;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
@@ -53,6 +54,13 @@ public class VillagerCleric extends MinetopiaVillager {
         super.registerGoals();
         goalSelector.addGoal(3, new GoalRetrieveFromStorage(this, DESIRES));
         goalSelector.addGoal(5, new GoalHealVillagers(this));
+    }
+
+    @Override
+    protected void giveStartingItems() {
+        getVillagerInventory().addItem(new ItemStack(Items.GLASS_BOTTLE, 8));
+        getVillagerInventory().addItem(new ItemStack(Items.NETHER_WART, 2));
+        getVillagerInventory().addItem(new ItemStack(Items.BLAZE_POWDER, 2));
     }
 
     @Override

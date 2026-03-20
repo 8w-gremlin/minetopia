@@ -11,6 +11,7 @@ import com.minetopia.village.storage.ItemDesire;
 import com.minetopia.village.storage.ItemDesireSet;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
@@ -54,6 +55,12 @@ public class VillagerTeacher extends MinetopiaVillager {
         goalSelector.addGoal(4, new GoalMakePaper(this));
         goalSelector.addGoal(5, new GoalDeliverToStorage(this, DESIRES));
         goalSelector.addGoal(6, new GoalTeachChildren(this));
+    }
+
+    @Override
+    protected void giveStartingItems() {
+        getVillagerInventory().addItem(new ItemStack(Items.BOOK, 4));
+        getVillagerInventory().addItem(new ItemStack(Items.SUGAR_CANE, 16));
     }
 
     @Override
