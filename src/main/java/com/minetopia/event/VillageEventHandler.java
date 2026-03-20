@@ -13,6 +13,7 @@ import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.minecraft.world.entity.Entity;
 import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.EntityLeaveLevelEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -128,6 +129,12 @@ public class VillageEventHandler {
     public static void onEntityLeaveLevel(EntityLeaveLevelEvent event) {
         if (!(event.getEntity() instanceof ItemFrame frame)) return;
         if (!(event.getLevel() instanceof ServerLevel level)) return;
+
+        // Only unregister when the frame was actually destroyed (broken by player, piston, etc.)
+        // shouldDestroy() is false for UNLOADED_TO_CHUNK and UNLOADED_WITH_PLAYER, which covers
+        // both chunk unloads and world shutdown — the two cases that were wiping village data.
+        Entity.RemovalReason reason = frame.getRemovalReason();
+        if (reason == null || !reason.shouldDestroy()) return;
 
         ItemStack inFrame = frame.getItem();
         if (inFrame.isEmpty()) return;

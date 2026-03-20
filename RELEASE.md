@@ -4,6 +4,13 @@ Versioning: MAJOR.MINOR.PATCH — PATCH and MINOR roll 0–99 before incrementin
 
 ---
 
+## [1.0.3] — 2026-03-21
+
+### Fixed
+- **Village data wiped on every world reload** — root cause found and fixed. `EntityLeaveLevelEvent` fires for all ItemFrames when chunks unload or the world closes, which was calling `onFrameItemRemoved` for every structure token, removing all village data and then saving the now-empty village map to disk. Fix: only process frame removal when `Entity.RemovalReason.shouldDestroy()` is true (i.e. the frame was actually broken), not for chunk unload or server shutdown events.
+
+---
+
 ## [1.0.2] — 2026-03-21
 
 ### Fixed
