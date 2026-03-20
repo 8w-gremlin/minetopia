@@ -1,0 +1,21 @@
+# Gradle
+.gradle/
+build/
+out/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# NeoForge run dirs
+runs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Compiled classes at project root (temp files)
+*.class

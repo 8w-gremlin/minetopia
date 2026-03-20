@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "HHH",
+    "GEG",
+    "SSS"
+  ],
+  "key": {
+    "H": { "item": "minecraft:hay_block" },
+    "G": { "item": "minecraft:glass" },
+    "E": { "item": "minecraft:emerald_block" },
+    "S": { "item": "minecraft:stone_bricks" }
+  },
+  "result": {
+    "id": "minetopia:town_hall_token",
+    "count": 1
+  }
+}

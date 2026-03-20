@@ -1,0 +1,44 @@
+{
+    "itemGroup.minetopia": "Minetopia",
+
+    "item.minetopia.guidebook": "Minetopia Guide",
+
+    "item.minetopia.town_hall_token": "Town Hall Token",
+
+    "item.minetopia.structure_house": "House Token",
+    "item.minetopia.structure_barracks": "Barracks Token",
+    "item.minetopia.structure_storage": "Storage Token",
+    "item.minetopia.structure_blacksmith": "Blacksmith Token",
+    "item.minetopia.structure_kitchen": "Kitchen Token",
+    "item.minetopia.structure_library": "Library Token",
+    "item.minetopia.structure_butcher": "Butcher Token",
+    "item.minetopia.structure_cow_pen": "Cow Pen Token",
+    "item.minetopia.structure_sheep_pen": "Sheep Pen Token",
+    "item.minetopia.structure_pig_pen": "Pig Pen Token",
+    "item.minetopia.structure_chicken_coop": "Chicken Coop Token",
+    "item.minetopia.structure_school": "School Token",
+    "item.minetopia.structure_tavern": "Tavern Token",
+    "item.minetopia.structure_mineshaft": "Mineshaft Token",
+    "item.minetopia.structure_guard_post": "Guard Post Token",
+    "item.minetopia.structure_merchant_stall": "Merchant Stall Token",
+
+    "item.minetopia.token_farmer": "Farmer Token",
+    "item.minetopia.token_miner": "Miner Token",
+    "item.minetopia.token_lumberjack": "Lumberjack Token",
+    "item.minetopia.token_blacksmith": "Blacksmith Token",
+    "item.minetopia.token_butcher": "Butcher Token",
+    "item.minetopia.token_chef": "Chef Token",
+    "item.minetopia.token_rancher": "Rancher Token",
+    "item.minetopia.token_enchanter": "Enchanter Token",
+    "item.minetopia.token_guard": "Guard Token",
+    "item.minetopia.token_cleric": "Cleric Token",
+    "item.minetopia.token_druid": "Druid Token",
+    "item.minetopia.token_bard": "Bard Token",
+    "item.minetopia.token_teacher": "Teacher Token",
+    "item.minetopia.token_captain": "Captain Token",
+    "item.minetopia.token_nitwit": "Nitwit Token",
+    "item.minetopia.token_nomad": "Nomad Token",
+    "item.minetopia.token_child": "Child Token",
+
+    "entity.minetopia.mayor": "Mayor"
+}
