@@ -19,3 +19,4 @@ Thumbs.db
 
 # Compiled classes at project root (temp files)
 *.class
+.claude/
