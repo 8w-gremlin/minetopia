@@ -80,7 +80,7 @@ public class VillagerFarmer extends MinetopiaVillager {
     protected void registerGoals() {
         super.registerGoals();
         goalSelector.addGoal(3, new GoalRetrieveFromStorage(this, FARMER_DESIRES));
-        goalSelector.addGoal(4, new GoalDeliverToStorage(this, FARMER_DESIRES));
+        goalSelector.addGoal(4, new GoalDeliverToStorage(this, FARMER_DESIRES, 4));
         goalSelector.addGoal(5, new GoalFarmCrops(this));
         goalSelector.addGoal(6, new GoalTillSoil(this));
     }

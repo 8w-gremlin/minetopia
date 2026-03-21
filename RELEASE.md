@@ -4,6 +4,18 @@ Versioning: MAJOR.MINOR.PATCH — PATCH and MINOR roll 0–99 before incrementin
 
 ---
 
+## [1.0.4] — 2026-03-21
+
+### Changed
+- **Trades disabled for all professions except Mayor** — right-clicking any non-mayor villager shows a "busy working" message. Mayor still sells all structure and profession tokens for emeralds. Trades will be re-enabled per profession once production is working correctly.
+
+### Fixed
+- **Lumberjack returns to storage after every single log** — `GoalChopTree` now continues finding and chopping logs after each block, only stopping when carrying 32+ logs or no more trees are nearby. Added axe swing animation on each chop.
+- **Farmer picks up and immediately re-delivers potatoes/carrots** — `GoalDeliverToStorage` now uses an excess-only delivery model: items that are also in the villager's retrieve desires (e.g. potatoes used as seeds) are only deposited when the villager holds *more* than their desired amount. Seeds kept for replanting are never dumped.
+- **Delivery thresholds** — Lumberjack and Miner now batch deliveries (threshold 32 items). Farmer threshold is 4 excess items. Creator professions (Chef, Blacksmith, etc.) deliver immediately as before.
+
+---
+
 ## [1.0.3] — 2026-03-21
 
 ### Fixed

@@ -39,6 +39,9 @@ public class VillagerMayor extends MinetopiaVillager {
     }
 
     @Override
+    protected boolean isTradingEnabled() { return true; }
+
+    @Override
     protected String getTradeName() {
         return "Mayor";
     }

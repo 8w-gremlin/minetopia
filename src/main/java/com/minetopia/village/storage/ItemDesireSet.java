@@ -34,13 +34,38 @@ public class ItemDesireSet {
         return false;
     }
 
-    /** True if the inventory contains any items flagged as produce. */
-    public boolean hasItemsToDeliver(SimpleContainer inventory) {
-        for (int i = 0; i < inventory.getContainerSize(); i++) {
-            ItemStack stack = inventory.getItem(i);
-            if (!stack.isEmpty() && deliverItems.contains(stack.getItem())) return true;
+    /**
+     * Returns the desired count for {@code item}, or 0 if it is not in the retrieve list.
+     * Used to calculate deliverable excess for items that are both retrieved and produced
+     * (e.g. a farmer retrieves potatoes as seeds but also produces them as harvest).
+     */
+    public int getDesiredCount(Item item) {
+        for (ItemDesire desire : retrieveDesires) {
+            if (desire.item() == item) return desire.desiredCount();
+        }
+        return 0;
+    }
+
+    /**
+     * True if the inventory contains at least {@code threshold} deliverable items,
+     * counting only the excess beyond the desired amount for items that are also desired.
+     * Use threshold=1 for creator professions (deliver as soon as produced).
+     * Use threshold=32 for producers (batch delivery).
+     */
+    public boolean hasItemsToDeliver(SimpleContainer inventory, int threshold) {
+        int excess = 0;
+        for (Item item : deliverItems) {
+            int actual  = countItem(inventory, item);
+            int desired = getDesiredCount(item);
+            excess += Math.max(0, actual - desired);
+            if (excess >= threshold) return true;
         }
         return false;
+    }
+
+    /** Convenience overload — threshold of 1 (deliver as soon as any produce is present). */
+    public boolean hasItemsToDeliver(SimpleContainer inventory) {
+        return hasItemsToDeliver(inventory, 1);
     }
 
     /** Count how many of a given item are in the container. */

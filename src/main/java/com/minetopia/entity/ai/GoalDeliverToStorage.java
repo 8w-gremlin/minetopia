@@ -25,13 +25,22 @@ public class GoalDeliverToStorage extends Goal {
 
     private final MinetopiaVillager villager;
     private final ItemDesireSet desires;
+    /** Minimum total excess-deliverable items before this goal activates. */
+    private final int deliveryThreshold;
 
     private BlockPos targetChest = null;
     private int stuckTimer = 0;
 
+    /** Use for creator professions — deliver as soon as finished goods are ready. */
     public GoalDeliverToStorage(MinetopiaVillager villager, ItemDesireSet desires) {
+        this(villager, desires, 1);
+    }
+
+    /** Use for producer professions — only walk to storage after accumulating enough goods. */
+    public GoalDeliverToStorage(MinetopiaVillager villager, ItemDesireSet desires, int deliveryThreshold) {
         this.villager = villager;
         this.desires = desires;
+        this.deliveryThreshold = deliveryThreshold;
         setFlags(EnumSet.of(Flag.MOVE));
     }
 
@@ -41,7 +50,7 @@ public class GoalDeliverToStorage extends Goal {
         long dayTime = serverLevel.getDayTime() % 24000;
         if (dayTime < WORK_START || dayTime > WORK_END) return false;
         if (villager.getVillageId().isEmpty()) return false;
-        if (!desires.hasItemsToDeliver(villager.getVillagerInventory())) return false;
+        if (!desires.hasItemsToDeliver(villager.getVillagerInventory(), deliveryThreshold)) return false;
         return findTargetChest(serverLevel);
     }
 
@@ -51,7 +60,7 @@ public class GoalDeliverToStorage extends Goal {
         if (!(villager.level() instanceof ServerLevel serverLevel)) return false;
         long dayTime = serverLevel.getDayTime() % 24000;
         if (dayTime < WORK_START || dayTime > WORK_END) return false;
-        if (!desires.hasItemsToDeliver(villager.getVillagerInventory())) return false;
+        if (!desires.hasItemsToDeliver(villager.getVillagerInventory(), 1)) return false;
         return stuckTimer < STUCK_LIMIT;
     }
 
@@ -88,9 +97,20 @@ public class GoalDeliverToStorage extends Goal {
         for (int i = 0; i < inv.getContainerSize(); i++) {
             ItemStack stack = inv.getItem(i);
             if (stack.isEmpty() || !desires.getDeliverItems().contains(stack.getItem())) continue;
-            ItemStack toDeposit = stack.copy();
+            // Only deposit the excess — items beyond what this villager needs for their job.
+            int desired = desires.getDesiredCount(stack.getItem());
+            int actual  = ItemDesireSet.countItem(inv, stack.getItem());
+            int canDeposit = Math.max(0, actual - desired);
+            if (canDeposit <= 0) continue;
+            int depositCount = Math.min(stack.getCount(), canDeposit);
+            ItemStack toDeposit = stack.copyWithCount(depositCount);
             toDeposit = depositIntoContainer(chest, toDeposit);
-            inv.setItem(i, toDeposit);
+            // Put any undeposited remainder back; reduce the slot by what was deposited
+            int deposited = depositCount - toDeposit.getCount();
+            if (deposited > 0) {
+                stack.shrink(deposited);
+                inv.setItem(i, stack);
+            }
         }
     }
 

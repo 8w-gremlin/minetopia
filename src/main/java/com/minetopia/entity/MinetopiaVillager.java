@@ -234,6 +234,13 @@ public abstract class MinetopiaVillager extends PathfinderMob implements Merchan
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (level().isClientSide()) return InteractionResult.SUCCESS;
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
+        if (!isTradingEnabled()) {
+            player.displayClientMessage(
+                    Component.literal("§7" + getCustomName() != null
+                            ? getCustomName().getString() : getTradeName()
+                            + " is busy working."), true);
+            return InteractionResult.SUCCESS;
+        }
         setTradingPlayer(player);
         openTradingScreen(player, Component.literal(getTradeName()), 1);
         return InteractionResult.SUCCESS;
@@ -243,6 +250,12 @@ public abstract class MinetopiaVillager extends PathfinderMob implements Merchan
     protected String getTradeName() {
         return "Villager";
     }
+
+    /**
+     * Override in VillagerMayor to enable the trade screen.
+     * All other professions have trading disabled until production is stable.
+     */
+    protected boolean isTradingEnabled() { return false; }
 
     // --- Merchant interface ---
 
@@ -328,6 +341,7 @@ public abstract class MinetopiaVillager extends PathfinderMob implements Merchan
 
     private MerchantOffers buildOffers() {
         MerchantOffers result = new MerchantOffers();
+        if (!isTradingEnabled()) return result;
         if (villageId.isEmpty() || level().isClientSide()) return result;
 
         var serverLevel = (net.minecraft.server.level.ServerLevel) level();

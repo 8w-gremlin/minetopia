@@ -63,7 +63,7 @@ public class VillagerLumberjack extends MinetopiaVillager {
     protected void registerGoals() {
         super.registerGoals();
         goalSelector.addGoal(3, new GoalRetrieveFromStorage(this, DESIRES));
-        goalSelector.addGoal(4, new GoalDeliverToStorage(this, DESIRES));
+        goalSelector.addGoal(4, new GoalDeliverToStorage(this, DESIRES, 32));
         goalSelector.addGoal(5, new GoalChopTree(this));
     }
 
